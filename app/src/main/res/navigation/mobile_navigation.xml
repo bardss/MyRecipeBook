@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_todo_list">
+
+  <fragment
+      android:id="@+id/navigation_todo_list"
+      android:name="com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListFragment"
+      tools:layout="@layout/fragment_recipe_list" />
+
+  <fragment
+      android:id="@+id/navigation_add_todo"
+      android:name="com.jakubaniola.myrecipebook.ui.addrecipe.AddRecipeFragment"
+      tools:layout="@layout/fragment_add_recipe" />
+</navigation>
