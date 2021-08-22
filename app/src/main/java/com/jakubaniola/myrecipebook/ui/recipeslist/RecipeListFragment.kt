@@ -11,10 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakubaniola.myrecipebook.R
 import com.jakubaniola.myrecipebook.databinding.FragmentRecipeListBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RecipeListFragment : Fragment() {
 
-    private lateinit var viewModel: RecipeListViewModel
+    private val viewModel by viewModel<RecipeListViewModel>()
     private lateinit var binding: FragmentRecipeListBinding
     private var adapter: RecipesAdapter
         get() = binding.recipeRecyclerView.adapter as RecipesAdapter
@@ -27,35 +28,27 @@ class RecipeListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel =
-            ViewModelProvider(this).get(RecipeListViewModel::class.java)
-        if (!this::binding.isInitialized) {
-            binding = FragmentRecipeListBinding.inflate(inflater, container, false)
-        }
-        setupAddTodoClick()
-        setupTodoRecyclerView()
-        setupTodoData()
+        binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        setupAddRecipeClick()
+        setupRecipeRecyclerView()
+        setupRecipeData()
         return binding.root
     }
 
-    private fun setupTodoRecyclerView() {
+    private fun setupRecipeRecyclerView() {
         adapter = RecipesAdapter()
         binding.recipeRecyclerView.layoutManager = LinearLayoutManager(context)
     }
 
-    private fun setupTodoData() {
-        viewModel.todos.observe(viewLifecycleOwner, Observer {
-            adapter.setTodos(it)
+    private fun setupRecipeData() {
+        viewModel.recipes.observe(viewLifecycleOwner, {
+            adapter.setRecipes(it)
         })
     }
 
-    private fun setupAddTodoClick() {
-        binding.addTodoFabImageView.setOnClickListener {
-            findNavController().navigate(R.id.navigation_add_todo)
+    private fun setupAddRecipeClick() {
+        binding.addRecipeFabImageView.setOnClickListener {
+            findNavController().navigate(R.id.navigation_add_recipe)
         }
-    }
-
-    private fun getTodoAdapter(): RecipesAdapter {
-        return binding.recipeRecyclerView.adapter as RecipesAdapter
     }
 }

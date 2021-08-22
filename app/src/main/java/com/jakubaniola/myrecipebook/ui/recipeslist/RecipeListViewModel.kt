@@ -1,14 +1,20 @@
 package com.jakubaniola.myrecipebook.ui.recipeslist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.jakubaniola.myrecipebook.database.databaseobjects.RecipeDO
+import androidx.lifecycle.*
+import com.jakubaniola.myrecipebook.database.databaseobjects.Recipe
 import com.jakubaniola.myrecipebook.repository.RecipeRepository
+import kotlinx.coroutines.launch
 
-class RecipeListViewModel() : ViewModel() {
+class RecipeListViewModel(private val recipeRepository: RecipeRepository) : ViewModel() {
 
-    private val _todos = MutableLiveData<List<RecipeDO>>()
-    val todos: LiveData<List<RecipeDO>>
-        get() = _todos
+    val recipes: LiveData<List<Recipe>>
+        get() = recipeRepository
+            .getRecipes()
+            .asLiveData()
+
+    fun refreshRecipes() {
+        viewModelScope.launch {
+            recipeRepository.getRecipes()
+        }
+    }
 }
