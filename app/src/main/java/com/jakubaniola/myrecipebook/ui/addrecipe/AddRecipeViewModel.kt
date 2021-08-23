@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewModel() {
 
     private val _viewState = MutableLiveData(AddRecipeViewState.BEFORE_ADD_RECIPE)
-    var viewState: LiveData<AddRecipeViewState> = _viewState
+    val viewState: LiveData<AddRecipeViewState>
         get() = _viewState
 
     var name: String = ""

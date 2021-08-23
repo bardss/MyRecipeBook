@@ -38,6 +38,6 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val recipeTitleTextView = view.findViewById<TextView>(R.id.recipeTitleTextView)
+        val recipeTitleTextView = view.findViewById<TextView>(R.id.recipe_title_text_view)
     }
 }

@@ -11,10 +11,4 @@ class RecipeListViewModel(private val recipeRepository: RecipeRepository) : View
         get() = recipeRepository
             .getRecipes()
             .asLiveData()
-
-    fun refreshRecipes() {
-        viewModelScope.launch {
-            recipeRepository.getRecipes()
-        }
-    }
 }

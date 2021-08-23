@@ -6,6 +6,5 @@ import org.koin.dsl.module
 
 val databaseModule = module {
     single { LocalDatabaseSQL.create(androidContext()) }
-
     single { get<LocalDatabaseSQL>().recipeDao() }
 }
