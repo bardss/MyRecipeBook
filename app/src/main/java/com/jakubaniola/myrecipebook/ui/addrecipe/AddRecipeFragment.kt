@@ -30,13 +30,13 @@ class AddRecipeFragment : Fragment() {
     }
 
     private fun setupRecipeValuesListeners() {
-        binding.nameEditText.addOnTextChanged {
-            viewModel.name = it
-        }
+        binding.nameEditText.addOnTextChanged { viewModel.name = it }
+        binding.rateEditText.addOnTextChanged { viewModel.rate = it }
+        binding.prepTimeEditText.addOnTextChanged { viewModel.prepTime = it }
     }
 
     private fun setupOnClicks() {
-        binding.addTextView.setOnClickListener {
+        binding.addRecipeFabImageView.setOnClickListener {
             viewModel.addRecipe()
         }
     }

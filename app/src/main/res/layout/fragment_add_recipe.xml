@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="32dp">
+    android:padding="28dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middle_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
 
     <TextView
         android:id="@+id/title_label_text_view"
@@ -19,7 +26,6 @@
         android:id="@+id/name_edit_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginStart="12dp"
         android:textColor="@color/colorText"
         android:textSize="@dimen/text_size_xlarge"
@@ -28,5 +34,78 @@
         app:layout_constraintTop_toTopOf="@id/title_label_text_view"
         app:layout_constraintBottom_toBottomOf="@id/title_label_text_view"/>
 
+    <TextView
+        android:id="@+id/prep_time_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/prep_time"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title_label_text_view" />
+
+    <EditText
+        android:id="@+id/prep_time_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size_xlarge"
+        app:layout_constraintEnd_toEndOf="@id/middle_guideline"
+        app:layout_constraintStart_toEndOf="@id/prep_time_label_text_view"
+        app:layout_constraintTop_toTopOf="@id/prep_time_label_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/prep_time_label_text_view" />
+
+    <TextView
+        android:id="@+id/rate_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="12dp"
+        android:text="@string/rate"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintStart_toStartOf="@id/middle_guideline"
+        app:layout_constraintTop_toBottomOf="@id/title_label_text_view" />
+
+    <EditText
+        android:id="@+id/rate_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:inputType="number"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size_xlarge"
+        app:layout_constraintEnd_toStartOf="@id/rate_max_label_text_view"
+        app:layout_constraintStart_toEndOf="@id/rate_label_text_view"
+        app:layout_constraintTop_toTopOf="@id/rate_label_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/rate_label_text_view" />
+
+    <TextView
+        android:id="@+id/rate_max_label_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/max_value"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/text_size_large"
+        app:layout_constraintStart_toEndOf="@id/rate_edit_text"
+        app:layout_constraintTop_toBottomOf="@id/title_label_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rate_label_text_view"
+        app:layout_constraintBottom_toBottomOf="@id/rate_label_text_view" />
+
+    <ImageView
+        android:id="@+id/add_recipe_fab_image_view"
+        android:layout_width="@dimen/fab_size"
+        android:layout_height="@dimen/fab_size"
+        android:background="@drawable/fab_background"
+        android:elevation="4dp"
+        android:layout_margin="4dp"
+        android:padding="@dimen/fab_padding"
+        android:src="@drawable/ic_check"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

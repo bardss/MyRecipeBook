@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/fab_background.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/activity_navigation.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/fragment_add_recipe.xml" value="0.23020833333333332" />
         <entry key="app/src/main/res/layout/fragment_navigation.xml" value="0.23020833333333332" />

@@ -12,14 +12,19 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
         get() = _viewState
 
     var name: String = ""
+    var rate: String = ""
+    var prepTime: String = ""
 
     fun addRecipe() {
         viewModelScope.launch {
             _viewState.postValue(AddRecipeViewState.LOADING)
             if (isRecipeValuesValid()) {
+                val rate = rate.toInt()
                 val recipeToAdd = Recipe(
                     null,
-                    name = name
+                    name = name,
+                    rate = rate,
+                    timeToPrepare = prepTime
                 )
                 recipeRepository.addRecipe(recipeToAdd)
                 _viewState.postValue(AddRecipeViewState.AFTER_ADD_RECIPE)

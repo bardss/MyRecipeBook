@@ -9,8 +9,9 @@ data class Recipe(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
     val name: String,
+    val timeToPrepare: String,
+    val rate: Int,
 //    val resultPhotos: List<String>,
-//    val timeToPrepare: LocalDateTime?,
 //    val linkToRecipe: String,
 //    val ingredients: List<String>,
 //    val recipe: String,

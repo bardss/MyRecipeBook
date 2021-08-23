@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">MyRecipeBook</string>
     <string name="title">Title:</string>
+    <string name="prep_time">Prep. time:</string>
+    <string name="rate">Rate:</string>
+    <string name="max_value">/10</string>
 </resources>

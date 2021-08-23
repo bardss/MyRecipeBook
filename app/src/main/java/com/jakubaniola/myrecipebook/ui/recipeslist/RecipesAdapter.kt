@@ -29,7 +29,9 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val recipe = recipes[position]
-        holder.recipeTitleTextView.text = recipe.name
+        holder.nameTextView.text = recipe.name
+        holder.rateTextView.text = recipe.rate.toString()
+        holder.prepTimeTextView.text = recipe.timeToPrepare
     }
 
     fun setRecipes(recipes: List<Recipe>) {
@@ -38,6 +40,8 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val recipeTitleTextView = view.findViewById<TextView>(R.id.recipe_title_text_view)
+        val nameTextView = view.findViewById<TextView>(R.id.name_text_view)
+        val rateTextView = view.findViewById<TextView>(R.id.rate_text_view)
+        val prepTimeTextView = view.findViewById<TextView>(R.id.prep_time_text_view)
     }
 }
