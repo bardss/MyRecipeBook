@@ -33,6 +33,10 @@ class AddRecipeFragment : Fragment() {
         binding.nameEditText.addOnTextChanged { viewModel.name = it }
         binding.rateEditText.addOnTextChanged { viewModel.rate = it }
         binding.prepTimeEditText.addOnTextChanged { viewModel.prepTime = it }
+        binding.ingredientListView.setupIngredientsListView(
+            { viewModel.ingredients.add(it) },
+            { viewModel.ingredients.remove(it) }
+        )
     }
 
     private fun setupOnClicks() {

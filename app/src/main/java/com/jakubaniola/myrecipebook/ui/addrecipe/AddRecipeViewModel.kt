@@ -14,6 +14,7 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
     var name: String = ""
     var rate: String = ""
     var prepTime: String = ""
+    var ingredients: MutableList<String> = mutableListOf()
 
     fun addRecipe() {
         viewModelScope.launch {
@@ -24,7 +25,8 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
                     null,
                     name = name,
                     rate = rate,
-                    timeToPrepare = prepTime
+                    timeToPrepare = prepTime,
+                    ingredients = ingredients
                 )
                 recipeRepository.addRecipe(recipeToAdd)
                 _viewState.postValue(AddRecipeViewState.AFTER_ADD_RECIPE)

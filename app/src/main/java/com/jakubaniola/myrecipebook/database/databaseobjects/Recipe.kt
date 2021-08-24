@@ -13,7 +13,7 @@ data class Recipe(
     val rate: Int,
 //    val resultPhotos: List<String>,
 //    val linkToRecipe: String,
-//    val ingredients: List<String>,
+    val ingredients: List<String>,
 //    val recipe: String,
 //    val recipePhotos: List<String>
 )

@@ -4,4 +4,6 @@
     <string name="prep_time">Prep. time:</string>
     <string name="rate">Rate:</string>
     <string name="max_value">/10</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="long_dash">—</string>
 </resources>
