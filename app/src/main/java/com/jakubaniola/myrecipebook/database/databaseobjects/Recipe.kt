@@ -12,7 +12,7 @@ data class Recipe(
     val timeToPrepare: String,
     val rate: Int,
     val resultPhotoPath: String,
-    val linkToRecipe: String,
+    val urlToRecipe: String,
     val ingredients: List<String>,
     val recipe: String,
     val recipePhotoPaths: List<String>

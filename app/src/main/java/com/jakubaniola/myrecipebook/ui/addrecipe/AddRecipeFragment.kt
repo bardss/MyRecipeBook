@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.jakubaniola.myrecipebook.R
+import com.jakubaniola.myrecipebook.customviews.TextField
 import com.jakubaniola.myrecipebook.databinding.FragmentAddRecipeBinding
 import com.jakubaniola.myrecipebook.ui.addrecipe.AddRecipeViewState.*
 import com.jakubaniola.myrecipebook.utils.addOnTextChanged
@@ -34,10 +35,19 @@ class AddRecipeFragment : Fragment(), PickPhotoActions {
     }
 
     private fun setupRecipeValuesListeners() {
-        binding.nameEditText.addOnTextChanged { viewModel.name = it }
-        binding.rateEditText.addOnTextChanged { viewModel.rate = it }
+        binding.nameEditText.addOnTextChanged {
+            viewModel.name = it
+            binding.nameEditText.error = null
+        }
+        binding.rateEditText.addOnTextChanged {
+            viewModel.rate = it
+            binding.rateEditText.error = null
+        }
         binding.prepTimeEditText.addOnTextChanged { viewModel.prepTime = it }
-        binding.linkToRecipeEditText.addOnTextChanged { viewModel.linkToRecipe = it }
+        binding.linkToRecipeEditText.addOnTextChanged {
+            viewModel.urlToRecipe = it
+            binding.linkToRecipeEditText.error = null
+        }
         binding.recipeEditText.addOnTextChanged { viewModel.recipe = it }
         binding.ingredientListView.setupIngredientsListView(
             { viewModel.ingredients.add(it) },
@@ -54,15 +64,27 @@ class AddRecipeFragment : Fragment(), PickPhotoActions {
     private fun setupViewStateListener() {
         viewModel.viewState.observe(viewLifecycleOwner, { state ->
             when (state) {
-                BEFORE_ADD_RECIPE -> {
-                }
-                ERROR -> {
-                }
-                AFTER_ADD_RECIPE -> {
-                    navigateBack()
-                }
+                is AfterAddRecipe -> navigateBack()
+                is AddRecipeError -> setErrorOnViews(state.errors)
             }
         })
+    }
+
+    private fun setErrorOnViews(errors: List<AddRecipeFieldError>) {
+        errors.forEach {
+            when (it) {
+                AddRecipeFieldError.EMPTY_TITLE ->
+                    setErrorOnTextField(binding.nameEditText, R.string.input_cannot_be_empty)
+                AddRecipeFieldError.INVALID_RATE ->
+                    setErrorOnTextField(binding.rateEditText, R.string.invalid_input)
+                AddRecipeFieldError.INVALID_LINK ->
+                    setErrorOnTextField(binding.linkToRecipeEditText, R.string.invalid_input)
+            }
+        }
+    }
+
+    private fun setErrorOnTextField(textField: TextField, errorStringId: Int) {
+        textField.error = resources.getString(errorStringId)
     }
 
     private fun navigateBack() {

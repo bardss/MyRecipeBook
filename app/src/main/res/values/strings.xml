@@ -9,4 +9,5 @@
     <string name="link_to_recipe">Link to recipe:</string>
     <string name="recipe">Recipe:</string>
     <string name="input_cannot_be_empty">Input cannot be empty</string>
+    <string name="invalid_input">Invalid input</string>
 </resources>

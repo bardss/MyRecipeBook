@@ -1,5 +1,6 @@
 package com.jakubaniola.myrecipebook.ui.addrecipe
 
+import android.webkit.URLUtil
 import androidx.lifecycle.*
 import com.jakubaniola.myrecipebook.database.databaseobjects.Recipe
 import com.jakubaniola.myrecipebook.repository.RecipeRepository
@@ -7,7 +8,8 @@ import kotlinx.coroutines.launch
 
 class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewModel() {
 
-    private val _viewState = MutableLiveData(AddRecipeViewState.BEFORE_ADD_RECIPE)
+    private val _viewState =
+        MutableLiveData<AddRecipeViewState>(AddRecipeViewState.BeforeAddRecipe)
     val viewState: LiveData<AddRecipeViewState>
         get() = _viewState
 
@@ -15,32 +17,49 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
     var rate: String = ""
     var prepTime: String = ""
     var ingredients: MutableList<String> = mutableListOf()
-    var linkToRecipe: String = ""
+    var urlToRecipe: String = ""
     var recipe: String = ""
     var resultPhotoPath: String = ""
     var recipePhotoPaths: MutableList<String> = mutableListOf()
 
     fun addRecipe() {
-        viewModelScope.launch {
-            if (isRecipeValuesValid()) {
-                val rate = rate.toInt()
-                val recipeToAdd = Recipe(
-                    null,
-                    name = name,
-                    rate = rate,
-                    timeToPrepare = prepTime,
-                    ingredients = ingredients,
-                    recipe = recipe,
-                    linkToRecipe = linkToRecipe,
-                    resultPhotoPath = resultPhotoPath,
-                    recipePhotoPaths = recipePhotoPaths
-                )
-                recipeRepository.addRecipe(recipeToAdd)
-            }
-        }.invokeOnCompletion {
-            _viewState.postValue(AddRecipeViewState.AFTER_ADD_RECIPE)
+        val validationErrors = getAddRecipeErrors()
+        if (validationErrors.isEmpty()) {
+            addRecipeToDatabase()
+        } else {
+            _viewState.postValue(AddRecipeViewState.AddRecipeError(validationErrors))
         }
     }
 
-    private fun isRecipeValuesValid() = name.isNotEmpty()
+    private fun addRecipeToDatabase() {
+        viewModelScope.launch {
+            val rate = rate.toInt()
+            val recipeToAdd = Recipe(
+                null,
+                name = name,
+                rate = rate,
+                timeToPrepare = prepTime,
+                ingredients = ingredients,
+                recipe = recipe,
+                urlToRecipe = urlToRecipe,
+                resultPhotoPath = resultPhotoPath,
+                recipePhotoPaths = recipePhotoPaths
+            )
+            recipeRepository.addRecipe(recipeToAdd)
+        }.invokeOnCompletion {
+            _viewState.postValue(AddRecipeViewState.AfterAddRecipe)
+        }
+    }
+
+    private fun getAddRecipeErrors(): List<AddRecipeFieldError> {
+        val errors = mutableListOf<AddRecipeFieldError>()
+        if (!isNameValid()) errors.add(AddRecipeFieldError.EMPTY_TITLE)
+        if (!isRateValid()) errors.add(AddRecipeFieldError.INVALID_RATE)
+        if (!isLinkValid()) errors.add(AddRecipeFieldError.INVALID_LINK)
+        return errors
+    }
+
+    private fun isNameValid() = name.isNotEmpty()
+    private fun isRateValid() = rate.toIntOrNull() != null
+    private fun isLinkValid() = urlToRecipe.isEmpty() || URLUtil.isValidUrl(urlToRecipe)
 }

@@ -1,7 +1,7 @@
 package com.jakubaniola.myrecipebook.ui.addrecipe
 
-enum class AddRecipeViewState {
-    BEFORE_ADD_RECIPE,
-    ERROR,
-    AFTER_ADD_RECIPE
+sealed class AddRecipeViewState {
+    object BeforeAddRecipe : AddRecipeViewState()
+    object AfterAddRecipe : AddRecipeViewState()
+    data class AddRecipeError(val errors: List<AddRecipeFieldError>) : AddRecipeViewState()
 }
