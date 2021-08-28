@@ -3,8 +3,9 @@ package com.jakubaniola.myrecipebook.utils
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.TextView
+import com.jakubaniola.myrecipebook.customviews.TextField
 
-fun TextView.addOnTextChanged(onTextChanged: (String) -> Unit) {
+fun TextField.addOnTextChanged(onTextChanged: (String) -> Unit) {
     addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

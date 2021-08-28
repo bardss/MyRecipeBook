@@ -9,9 +9,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
+        android:fontFamily="@font/poppins_regular"
         android:text="@string/long_dash"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="@dimen/text_size_medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -19,10 +20,11 @@
         android:id="@+id/ingredient_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
         android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/poppins_regular"
         android:textColor="@color/colorText"
-        android:textSize="@dimen/text_size_large"
+        android:textSize="@dimen/text_size_medium"
         app:layout_constraintEnd_toStartOf="@id/remove_image_view"
         app:layout_constraintStart_toEndOf="@id/dash_text_view"
         app:layout_constraintTop_toTopOf="parent" />

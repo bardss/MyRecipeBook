@@ -32,6 +32,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
         holder.nameTextView.text = recipe.name
         holder.rateTextView.text = recipe.rate.toString()
         holder.prepTimeTextView.text = recipe.timeToPrepare
+        holder.resultPhotoPath.text = recipe.resultPhotoPath
     }
 
     fun setRecipes(recipes: List<Recipe>) {
@@ -43,5 +44,6 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
         val nameTextView = view.findViewById<TextView>(R.id.name_text_view)
         val rateTextView = view.findViewById<TextView>(R.id.rate_text_view)
         val prepTimeTextView = view.findViewById<TextView>(R.id.prep_time_text_view)
+        val resultPhotoPath = view.findViewById<TextView>(R.id.result_photo_text_view)
     }
 }

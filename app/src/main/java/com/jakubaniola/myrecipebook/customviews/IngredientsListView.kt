@@ -1,11 +1,8 @@
 package com.jakubaniola.myrecipebook.customviews
 
 import android.content.Context
-import android.media.Image
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,7 +11,7 @@ import com.jakubaniola.myrecipebook.R
 class IngredientsListView : LinearLayout {
 
     private var addImageView: ImageView
-    private var ingredientInputEditText: EditText
+    private var ingredientInputEditText: TextField
 
     constructor(context: Context) : super(context)
 
@@ -39,13 +36,20 @@ class IngredientsListView : LinearLayout {
         onRemoveIngredient: (String) -> Unit
     ) {
         addImageView.setOnClickListener {
-            onAddIngredientAction(onAddIngredient)
-            addNextIngredient(onRemoveIngredient)
+            ingredientInputEditText.error = null
+            val newIngredient = ingredientInputEditText.text
+            if (newIngredient.isNotEmpty()) {
+                onAddIngredientAction(onAddIngredient)
+                addNextIngredient(onRemoveIngredient)
+            } else {
+                ingredientInputEditText.error =
+                    context.resources.getString(R.string.input_cannot_be_empty)
+            }
         }
     }
 
     private fun onAddIngredientAction(onAddIngredient: (String) -> Unit) {
-        val input = ingredientInputEditText.text.toString()
+        val input = ingredientInputEditText.text
         onAddIngredient(input)
     }
 
@@ -53,8 +57,8 @@ class IngredientsListView : LinearLayout {
         val ingredientView = inflate(context, R.layout.layout_ingredient, null)
         val removeImageView = ingredientView.findViewById<ImageView>(R.id.remove_image_view)
         val ingredientTextView = ingredientView.findViewById<TextView>(R.id.ingredient_text_view)
-        ingredientTextView.text = ingredientInputEditText.text.toString()
-        ingredientInputEditText.setText("")
+        ingredientTextView.text = ingredientInputEditText.text
+        ingredientInputEditText.text = ""
         removeImageView.setOnClickListener {
             onRemoveIngredient(ingredientTextView, onRemoveIngredient, ingredientView)
         }

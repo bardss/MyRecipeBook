@@ -15,10 +15,13 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
     var rate: String = ""
     var prepTime: String = ""
     var ingredients: MutableList<String> = mutableListOf()
+    var linkToRecipe: String = ""
+    var recipe: String = ""
+    var resultPhotoPath: String = ""
+    var recipePhotoPaths: MutableList<String> = mutableListOf()
 
     fun addRecipe() {
         viewModelScope.launch {
-            _viewState.postValue(AddRecipeViewState.LOADING)
             if (isRecipeValuesValid()) {
                 val rate = rate.toInt()
                 val recipeToAdd = Recipe(
@@ -26,11 +29,16 @@ class AddRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewM
                     name = name,
                     rate = rate,
                     timeToPrepare = prepTime,
-                    ingredients = ingredients
+                    ingredients = ingredients,
+                    recipe = recipe,
+                    linkToRecipe = linkToRecipe,
+                    resultPhotoPath = resultPhotoPath,
+                    recipePhotoPaths = recipePhotoPaths
                 )
                 recipeRepository.addRecipe(recipeToAdd)
-                _viewState.postValue(AddRecipeViewState.AFTER_ADD_RECIPE)
             }
+        }.invokeOnCompletion {
+            _viewState.postValue(AddRecipeViewState.AFTER_ADD_RECIPE)
         }
     }
 

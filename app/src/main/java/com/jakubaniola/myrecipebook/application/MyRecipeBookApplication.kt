@@ -1,6 +1,7 @@
 package com.jakubaniola.myrecipebook.application
 
 import android.app.Application
+import android.content.Context
 import com.jakubaniola.myrecipebook.di.databaseModule
 import com.jakubaniola.myrecipebook.di.repositoryModule
 import com.jakubaniola.myrecipebook.di.viewModelModule
@@ -12,6 +13,7 @@ class MyRecipeBookApplication : Application() {
 
   override fun onCreate() {
     super.onCreate()
+    context = applicationContext
     initKoin()
   }
 
@@ -26,5 +28,9 @@ class MyRecipeBookApplication : Application() {
         )
       )
     }
+  }
+
+  companion object {
+    lateinit var context: Context
   }
 }

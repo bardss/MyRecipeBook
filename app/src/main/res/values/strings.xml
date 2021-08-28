@@ -6,4 +6,7 @@
     <string name="max_value">/10</string>
     <string name="ingredients">Ingredients:</string>
     <string name="long_dash">—</string>
+    <string name="link_to_recipe">Link to recipe:</string>
+    <string name="recipe">Recipe:</string>
+    <string name="input_cannot_be_empty">Input cannot be empty</string>
 </resources>
