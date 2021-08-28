@@ -1,6 +1,6 @@
 package com.jakubaniola.myrecipebook.ui.recipeslist
 
-enum class ListType {
-    LIST,
-    GRID
+enum class RecipeSortType {
+    DEFAUlT,
+    BY_RATE
 }

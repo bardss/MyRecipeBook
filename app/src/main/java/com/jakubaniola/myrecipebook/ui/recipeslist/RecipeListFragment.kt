@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import com.jakubaniola.myrecipebook.R
 import com.jakubaniola.myrecipebook.databinding.FragmentRecipeListBinding
-import com.jakubaniola.myrecipebook.ui.recipeslist.ListType.*
+import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListType.*
+import com.jakubaniola.myrecipebook.utils.ResUtil
 import com.jakubaniola.pickphotoview.PickPhotoImageUtil
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -34,9 +36,11 @@ class RecipeListFragment : Fragment() {
     ): View {
         binding = FragmentRecipeListBinding.inflate(inflater, container, false)
         setupAddRecipeClick()
-        setupChangeLayoutManagerClick()
+        setupListTypeClick()
+        setupSortTypeClick()
         setupRecipeRecyclerView()
         setupRecipeDataObserver()
+        setupSortTypeObserver()
         setupListTypeObserver()
         return binding.root
     }
@@ -46,22 +50,29 @@ class RecipeListFragment : Fragment() {
         binding.recipeRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
     }
 
-    private fun setupChangeLayoutManagerClick() {
-        binding.root.findViewById<ImageView>(R.id.layout_manager_image_view)
+    private fun setupListTypeClick() {
+        binding.root.findViewById<ImageView>(R.id.list_type_image_view)
             .setOnClickListener { viewModel.toggleListType() }
+    }
+
+    private fun setupSortTypeClick() {
+        binding.root.findViewById<ImageView>(R.id.sort_type_image_view)
+            .setOnClickListener { viewModel.toggleSortType() }
     }
 
     private fun setupListTypeObserver() {
         viewModel.listType.observe(viewLifecycleOwner, { listType ->
             val listTypeImageView =
-                binding.root.findViewById<ImageView>(R.id.layout_manager_image_view)
+                binding.root.findViewById<ImageView>(R.id.list_type_image_view)
             when (listType) {
                 LIST -> {
-                    listTypeImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_list))
+                    val drawable = ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_list)
+                    listTypeImageView.setImageDrawable(drawable)
                     setLayoutManager(LinearLayoutManager(context))
                 }
                 GRID -> {
-                    listTypeImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_grid))
+                    val drawable = ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_grid)
+                    listTypeImageView.setImageDrawable(drawable)
                     setLayoutManager(StaggeredGridLayoutManager(2, VERTICAL))
                 }
             }
@@ -73,8 +84,23 @@ class RecipeListFragment : Fragment() {
         binding.recipeRecyclerView.requestLayout()
     }
 
+    private fun setupSortTypeObserver() {
+        viewModel.sortType.observe(viewLifecycleOwner, { listType ->
+            val listTypeImageView =
+                binding.root.findViewById<ImageView>(R.id.sort_type_image_view)
+            when (listType) {
+                RecipeSortType.DEFAUlT -> listTypeImageView.setImageDrawable(
+                    ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_star_unfilled)
+                )
+                RecipeSortType.BY_RATE -> listTypeImageView.setImageDrawable(
+                    ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_star_filled)
+                )
+            }
+        })
+    }
+
     private fun setupRecipeDataObserver() {
-        viewModel.recipes.observe(viewLifecycleOwner, {
+        viewModel.sortedRecipes.observe(viewLifecycleOwner, {
             adapter.setRecipes(it)
         })
     }
