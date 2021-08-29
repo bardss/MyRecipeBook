@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="text_size_xxlarge">24sp</dimen>
     <dimen name="text_size_xlarge">20sp</dimen>
     <dimen name="text_size_large">18sp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
     <dimen name="fab_size">56dp</dimen>
     <dimen name="fab_padding">8dp</dimen>
+    <dimen name="edit_fab_padding">12dp</dimen>
 </resources>

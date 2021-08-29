@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,12 +12,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
 import com.jakubaniola.myrecipebook.R
+import com.jakubaniola.myrecipebook.customviews.TextField
 import com.jakubaniola.myrecipebook.databinding.FragmentRecipeListBinding
+import com.jakubaniola.myrecipebook.ui.ArgumentKeys
 import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListType.*
 import com.jakubaniola.myrecipebook.utils.ResUtil
+import com.jakubaniola.myrecipebook.utils.addOnTextChanged
 import com.jakubaniola.pickphotoview.PickPhotoImageUtil
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@FlowPreview
 class RecipeListFragment : Fragment() {
 
     private val viewModel by viewModel<RecipeListViewModel>()
@@ -42,11 +46,15 @@ class RecipeListFragment : Fragment() {
         setupRecipeDataObserver()
         setupSortTypeObserver()
         setupListTypeObserver()
+        setupSearchView()
         return binding.root
     }
 
     private fun setupRecipeRecyclerView() {
-        adapter = RecipesAdapter(PickPhotoImageUtil(binding.recipeRecyclerView.context), resources)
+        adapter = RecipesAdapter(
+            PickPhotoImageUtil(binding.recipeRecyclerView.context),
+            ::navigateToRecipeDetails
+        )
         binding.recipeRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
     }
 
@@ -100,14 +108,30 @@ class RecipeListFragment : Fragment() {
     }
 
     private fun setupRecipeDataObserver() {
-        viewModel.sortedRecipes.observe(viewLifecycleOwner, {
+        viewModel.filteredRecipes.observe(viewLifecycleOwner, {
             adapter.setRecipes(it)
         })
     }
 
     private fun setupAddRecipeClick() {
-        binding.addRecipeFabImageView.setOnClickListener {
-            findNavController().navigate(R.id.navigation_add_recipe)
+        binding.fabImageView.setOnClickListener {
+            findNavController().navigate(R.id.navigation_add_edit_recipe)
         }
+    }
+
+
+    private fun setupSearchView() {
+        val searchTextField =
+            binding.root.findViewById<TextField>(R.id.search_text_field)
+        searchTextField.addOnTextChanged {
+            viewModel.onSearch(it)
+        }
+    }
+
+    private fun navigateToRecipeDetails(recipeId: Int) {
+        val arguments = Bundle().apply {
+            putInt(ArgumentKeys.RECIPE_ID, recipeId)
+        }
+        findNavController().navigate(R.id.navigation_recipe_details, arguments)
     }
 }

@@ -1,6 +1,5 @@
 package com.jakubaniola.myrecipebook.ui.recipeslist
 
-import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.jakubaniola.pickphotoview.PickPhotoImageUtil
 
 class RecipesAdapter(
     private val imageUtil: PickPhotoImageUtil,
-    private val resources: Resources
+    private val onRecipeClickAction: (Int) -> Unit
 ) : RecyclerView.Adapter<RecipesAdapter.ViewHolder>() {
 
     private var recipes: List<Recipe> = listOf()
@@ -36,12 +35,16 @@ class RecipesAdapter(
     override fun onBindViewHolder(holder: RecipesAdapter.ViewHolder, position: Int) {
         val recipe = recipes[position]
         holder.nameTextView.text = recipe.name.underline()
+        holder.recipeItemLayout.setOnClickListener {
+            recipe.id?.let { onRecipeClickAction(it) }
+        }
         setupRateText(recipe, holder)
         setupPrepTime(recipe, holder)
         setupResultImage(recipe, holder)
     }
 
     private fun setupRateText(recipe: Recipe, holder: ViewHolder) {
+        val resources = holder.rateTextView.context.resources
         val rateText = recipe.rate.toString() + resources.getString(R.string.max_value)
         holder.rateTextView.text = rateText
     }
@@ -82,6 +85,7 @@ class RecipesAdapter(
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val recipeItemLayout = view.findViewById<ViewGroup>(R.id.recipe_item_layout)
         val nameTextView = view.findViewById<TextView>(R.id.name_text_view)
         val rateTextView = view.findViewById<TextView>(R.id.rate_text_view)
         val prepTimeTextView = view.findViewById<TextView>(R.id.prep_time_text_view)

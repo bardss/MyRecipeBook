@@ -11,7 +11,12 @@
       tools:layout="@layout/fragment_recipe_list" />
 
   <fragment
-      android:id="@+id/navigation_add_recipe"
-      android:name="com.jakubaniola.myrecipebook.ui.addrecipe.AddRecipeFragment"
-      tools:layout="@layout/fragment_add_recipe" />
+      android:id="@+id/navigation_add_edit_recipe"
+      android:name="com.jakubaniola.myrecipebook.ui.addeditrecipe.AddEditRecipeFragment"
+      tools:layout="@layout/fragment_add_edit_recipe" />
+
+  <fragment
+      android:id="@+id/navigation_recipe_details"
+      android:name="com.jakubaniola.myrecipebook.ui.recipedetails.RecipeDetailsFragment"
+      tools:layout="@layout/fragment_recipe_details" />
 </navigation>

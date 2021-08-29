@@ -5,10 +5,13 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipe_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         android:background="@drawable/recipe_background"
+        android:clickable="true"
+        android:focusable="true"
         android:elevation="4dp">
 
         <ImageView

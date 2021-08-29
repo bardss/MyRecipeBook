@@ -8,6 +8,8 @@ class RecipeRepositoryImpl(private val recipeDao: RecipeDao) : RecipeRepository 
 
     override fun getRecipes(): Flow<List<Recipe>> = recipeDao.getAllRecipes()
 
+    override suspend fun getRecipe(recipeId: Int): Recipe = recipeDao.getRecipe(recipeId)
+
     override suspend fun addRecipe(recipe: Recipe) {
         recipeDao.addRecipe(recipe)
     }

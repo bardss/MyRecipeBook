@@ -1,19 +1,22 @@
 package com.jakubaniola.myrecipebook.ui.recipeslist
 
-import android.provider.MediaStore
 import androidx.lifecycle.*
 import com.jakubaniola.myrecipebook.database.DatabaseKeys
 import com.jakubaniola.myrecipebook.database.LocalDatabaseNoSQL
 import com.jakubaniola.myrecipebook.database.databaseobjects.Recipe
 import com.jakubaniola.myrecipebook.repository.RecipeRepository
-import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListType.*
-import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeSortType.*
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.flow.transform
+import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListType.GRID
+import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeListType.LIST
+import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeSortType.BY_RATE
+import com.jakubaniola.myrecipebook.ui.recipeslist.RecipeSortType.DEFAUlT
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 
-class RecipeListViewModel(private val recipeRepository: RecipeRepository) : ViewModel() {
+private const val SEARCH_DELAY_MILLIS = 750L
+private const val MIN_QUERY_LENGTH = 3
+
+@FlowPreview
+class RecipeListViewModel(recipeRepository: RecipeRepository) : ViewModel() {
 
     private var _listType = MutableLiveData(getListTypeFromDatabase())
     val listType: LiveData<RecipeListType>
@@ -28,11 +31,29 @@ class RecipeListViewModel(private val recipeRepository: RecipeRepository) : View
             .getRecipes()
             .asLiveData()
 
-    val sortedRecipes = MediatorLiveData<List<Recipe>>()
+    private val searchQuery = MutableLiveData("")
+    private var debouncedSearchQuery: LiveData<String> = searchQuery
+        .asFlow()
+        .debounce(SEARCH_DELAY_MILLIS)
+        .filter { it.length >= MIN_QUERY_LENGTH || it.isEmpty() }
+        .asLiveData()
+
+    val filteredRecipes = MediatorLiveData<List<Recipe>>()
 
     init {
-        sortedRecipes.addSource(recipes) {
-            sortedRecipes.value = sortRecipes(_sortType.value, it)
+        setupRecipesSources()
+    }
+
+    private fun setupRecipesSources() {
+        filteredRecipes.addSource(recipes) {
+            filteredRecipes.value = filterRecipes(_sortType.value, debouncedSearchQuery.value, it)
+        }
+        filteredRecipes.addSource(_sortType) {
+            if (recipes.value != null)
+                filteredRecipes.value = filterRecipes(it, debouncedSearchQuery.value, recipes.value)
+        }
+        filteredRecipes.addSource(debouncedSearchQuery) {
+            filteredRecipes.value = filterRecipes(_sortType.value, it, recipes.value)
         }
     }
 
@@ -54,7 +75,10 @@ class RecipeListViewModel(private val recipeRepository: RecipeRepository) : View
         }
         _sortType.postValue(newSortType)
         putSortTypeToDatabase(newSortType)
-        sortedRecipes.value = sortRecipes(newSortType, recipes.value)
+    }
+
+    fun onSearch(newSearchQuery: String) {
+        searchQuery.postValue(newSearchQuery)
     }
 
     private fun putListTypeToDatabase(listType: RecipeListType) {
@@ -77,9 +101,17 @@ class RecipeListViewModel(private val recipeRepository: RecipeRepository) : View
     private fun getSortTypeFromDatabase(): RecipeSortType =
         RecipeSortType.values()[LocalDatabaseNoSQL.getInstance().getInt(DatabaseKeys.SORT_TYPE, 0)]
 
-    private fun sortRecipes(sortType: RecipeSortType?, recipes: List<Recipe>?): List<Recipe>? {
+    private fun filterRecipes(
+        sortType: RecipeSortType?,
+        searchQuery: String?,
+        recipes: List<Recipe>?
+    ): List<Recipe> {
+        val searchQuery = searchQuery?.lowercase() ?: ""
+        val filteredRecipes = recipes?.filter {
+            it.name.lowercase().contains(searchQuery)
+        } ?: listOf()
         return if (sortType == BY_RATE) {
-            recipes?.sortedByDescending { it.rate }
-        } else recipes
+            filteredRecipes.sortedByDescending { it.rate }
+        } else filteredRecipes
     }
 }
