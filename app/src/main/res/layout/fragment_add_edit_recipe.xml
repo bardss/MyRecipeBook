@@ -36,21 +36,21 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                app:textFieldTextSize="@dimen/text_size_xlarge"
                 app:layout_constraintBottom_toBottomOf="@id/title_label_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/title_label_text_view"
-                app:layout_constraintTop_toTopOf="@id/title_label_text_view" />
+                app:layout_constraintTop_toTopOf="@id/title_label_text_view"
+                app:textFieldTextSize="@dimen/text_size_xlarge" />
 
             <com.jakubaniola.pickphotoview.PickPhotoLayout
                 android:id="@+id/pick_result_photo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:mode="ENABLE_ADD_ONE"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title_label_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/title_label_text_view"
+                app:mode="ENABLE_ADD_ONE" />
 
             <TextView
                 android:id="@+id/prep_time_label_text_view"
@@ -69,11 +69,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                app:textFieldTextSize="@dimen/text_size_large"
                 app:layout_constraintBottom_toBottomOf="@id/prep_time_label_text_view"
                 app:layout_constraintEnd_toEndOf="@id/middle_guideline"
                 app:layout_constraintStart_toEndOf="@id/prep_time_label_text_view"
-                app:layout_constraintTop_toTopOf="@id/prep_time_label_text_view" />
+                app:layout_constraintTop_toTopOf="@id/prep_time_label_text_view"
+                app:textFieldTextSize="@dimen/text_size_large" />
 
             <TextView
                 android:id="@+id/rate_label_text_view"
@@ -94,11 +94,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:inputType="number"
-                app:textFieldTextSize="@dimen/text_size_large"
                 app:layout_constraintBottom_toBottomOf="@id/rate_label_text_view"
                 app:layout_constraintEnd_toStartOf="@id/rate_max_label_text_view"
                 app:layout_constraintStart_toEndOf="@id/rate_label_text_view"
-                app:layout_constraintTop_toTopOf="@id/rate_label_text_view" />
+                app:layout_constraintTop_toTopOf="@id/rate_label_text_view"
+                app:textFieldTextSize="@dimen/text_size_large" />
 
             <TextView
                 android:id="@+id/rate_max_label_text_view"
@@ -151,10 +151,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:textFieldTextSize="@dimen/text_size_large"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/link_to_recipe_label_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/link_to_recipe_label_text_view"
+                app:textFieldTextSize="@dimen/text_size_large" />
 
             <TextView
                 android:id="@+id/recipe_label_text_view"
@@ -173,20 +173,24 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:textFieldTextSize="@dimen/text_size_large"
+                android:gravity="top | start"
+                android:inputType="textMultiLine"
+                android:lines="1"
+                android:maxLines="30"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_label_text_view" />
+                app:layout_constraintTop_toBottomOf="@id/recipe_label_text_view"
+                app:textFieldTextSize="@dimen/text_size_large" />
 
             <com.jakubaniola.pickphotoview.PickPhotoLayout
                 android:id="@+id/pick_recipe_photo_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                app:mode="ENABLE_ADD_MULTIPLE"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipe_edit_text" />
+                app:layout_constraintTop_toBottomOf="@id/recipe_edit_text"
+                app:mode="ENABLE_ADD_MULTIPLE" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -195,11 +199,11 @@
         android:id="@+id/fab_image_view"
         android:layout_width="@dimen/fab_size"
         android:layout_height="@dimen/fab_size"
+        android:layout_gravity="bottom | end"
         android:layout_margin="32dp"
         android:background="@drawable/fab_background"
         android:elevation="4dp"
         android:padding="@dimen/fab_padding"
-        android:src="@drawable/ic_check"
-        android:layout_gravity="bottom | end"/>
+        android:src="@drawable/ic_check" />
 
 </FrameLayout>
