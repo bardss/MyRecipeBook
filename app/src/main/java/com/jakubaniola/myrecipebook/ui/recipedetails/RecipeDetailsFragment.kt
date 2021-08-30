@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakubaniola.myrecipebook.R
 import com.jakubaniola.myrecipebook.database.databaseobjects.Recipe
 import com.jakubaniola.myrecipebook.databinding.FragmentRecipeDetailsBinding
@@ -55,6 +56,7 @@ class RecipeDetailsFragment : Fragment(), PickPhotoActions {
         setLinkToRecipe(recipe.urlToRecipe)
         setRecipe(recipe.recipe)
         binding.pickRecipePhotoLayout.setPictures(recipe.recipePhotoPaths)
+        setIngredients(recipe.ingredients)
     }
 
     private fun setPrepTime(prepTime: String) {
@@ -103,6 +105,13 @@ class RecipeDetailsFragment : Fragment(), PickPhotoActions {
                 putInt(ArgumentKeys.RECIPE_ID, it)
             }
             findNavController().navigate(R.id.navigation_add_edit_recipe, arguments)
+        }
+    }
+
+    private fun setIngredients(ingredients: List<String>) {
+        binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.ingredientsRecyclerView.adapter = IngredientsListAdapter().apply {
+            setIngredients(ingredients)
         }
     }
 }

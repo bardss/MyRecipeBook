@@ -5,7 +5,9 @@ import androidx.room.TypeConverter
 class Converters {
     @TypeConverter
     fun toToListOfStrings(paths: String): List<String> {
-        return paths.split(",").map { it.trim() }
+        var list = paths.split(",").map { it.trim() }
+        if (list.size == 1 && list[0].isEmpty()) list = listOf()
+        return list
     }
 
     @TypeConverter
