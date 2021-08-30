@@ -1,9 +1,11 @@
 package com.jakubaniola.myrecipebook.ui.addeditrecipe
 
+import android.util.Patterns
 import android.webkit.URLUtil
 import androidx.lifecycle.*
 import com.jakubaniola.myrecipebook.database.databaseobjects.Recipe
 import com.jakubaniola.myrecipebook.repository.RecipeRepository
+import com.jakubaniola.myrecipebook.utils.UrlUtil
 import kotlinx.coroutines.launch
 
 class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : ViewModel() {
@@ -23,6 +25,16 @@ class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : V
     var recipeText: String = ""
     var resultPhotoPath: String = ""
     var recipePhotoPaths: MutableList<String> = mutableListOf()
+
+    fun deleteRecipe() {
+        viewModelScope.launch {
+            recipe.value?.let {
+                recipeRepository.deleteRecipe(it)
+            }
+        }.invokeOnCompletion {
+            viewState.postValue(AddEditRecipeViewState.AfterDeleteRecipeState)
+        }
+    }
 
     fun addRecipe() {
         validateRecipeErrors(
@@ -89,7 +101,7 @@ class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : V
             timeToPrepare = prepTime,
             ingredients = ingredients,
             recipe = recipeText,
-            urlToRecipe = urlToRecipe,
+            urlToRecipe = UrlUtil().prepareUrlToOpenInBrowser(urlToRecipe),
             resultPhotoPath = resultPhotoPath,
             recipePhotoPaths = recipePhotoPaths
         )
@@ -105,7 +117,8 @@ class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : V
 
     private fun isNameValid() = name.isNotEmpty()
     private fun isRateValid() = rate.toIntOrNull() != null
-    private fun isLinkValid() = urlToRecipe.isEmpty() || URLUtil.isValidUrl(urlToRecipe)
+    private fun isLinkValid() =
+        urlToRecipe.isEmpty() || Patterns.WEB_URL.matcher(urlToRecipe).matches()
 
     private fun setRecipeDetails(recipe: Recipe) {
         name = recipe.name

@@ -8,4 +8,5 @@ interface RecipeRepository {
     suspend fun getRecipe(recipeId: Int): Recipe
     suspend fun addRecipe(recipe: Recipe)
     suspend fun editRecipe(recipe: Recipe)
+    suspend fun deleteRecipe(recipe: Recipe)
 }

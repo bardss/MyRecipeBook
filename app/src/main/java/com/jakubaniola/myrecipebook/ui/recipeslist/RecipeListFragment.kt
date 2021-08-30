@@ -119,7 +119,7 @@ class RecipeListFragment : Fragment() {
     }
 
     private fun setupAddRecipeClick() {
-        binding.fabImageView.setOnClickListener {
+        binding.addFabImageView.setOnClickListener {
             findNavController().navigate(R.id.navigation_add_edit_recipe)
         }
     }

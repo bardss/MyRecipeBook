@@ -10,4 +10,7 @@
     <string name="recipe">Recipe:</string>
     <string name="input_cannot_be_empty">Input cannot be empty</string>
     <string name="invalid_input">Invalid input</string>
+    <string name="do_you_want_to_delete_recipe">Do you want to delete recipe?</string>
+    <string name="delete">Delete</string>
+    <string name="back">Back</string>
 </resources>

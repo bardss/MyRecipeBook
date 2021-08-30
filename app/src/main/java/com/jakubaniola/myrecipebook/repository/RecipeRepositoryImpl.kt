@@ -17,4 +17,8 @@ class RecipeRepositoryImpl(private val recipeDao: RecipeDao) : RecipeRepository 
     override suspend fun editRecipe(recipe: Recipe) {
         recipeDao.editRecipe(recipe)
     }
+
+    override suspend fun deleteRecipe(recipe: Recipe) {
+        recipeDao.deleteRecipe(recipe)
+    }
 }

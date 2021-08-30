@@ -15,6 +15,9 @@ import com.jakubaniola.myrecipebook.ui.addeditrecipe.AddEditRecipeViewState.*
 import com.jakubaniola.myrecipebook.utils.addOnTextChanged
 import com.jakubaniola.pickphotoview.PickPhotoActions
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.view.KeyEvent
+import androidx.activity.OnBackPressedCallback
+
 
 class AddEditRecipeFragment : Fragment(), PickPhotoActions {
 
@@ -33,7 +36,24 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
         setupAddEditRecipeView()
         binding.pickResultPhotoLayout.setPickPhotoFragment(this)
         binding.pickRecipePhotoLayout.setPickPhotoFragment(this)
+        setupOnBackPressed()
         return binding.root
+    }
+
+    private fun setupOnBackPressed() {
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() { onBackPressed() }
+            }
+        )
+    }
+
+    private fun onBackPressed() {
+        if (binding.alertDialogLayout.visibility == View.VISIBLE) {
+            binding.alertDialogLayout.visibility = View.GONE
+        } else {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setupAddEditRecipeView() {
@@ -75,6 +95,7 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
                 is AddRecipeState -> setupAddView()
                 is EditRecipeState -> setupEditView()
                 is AfterAddEditRecipeState -> navigateBack()
+                is AfterDeleteRecipeState -> navigateBackToRecipeList()
                 is AddEditRecipeErrorState -> setErrorOnViews(state.errors)
             }
         })
@@ -99,6 +120,10 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
 
     private fun navigateBack() {
         findNavController().popBackStack()
+    }
+
+    private fun navigateBackToRecipeList() {
+        findNavController().navigate(R.id.navigate_without_stack_to_recipe_list)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -126,14 +151,22 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
     }
 
     private fun setupEditView() {
-        setupFabOnClick { viewModel.editRecipe() }
+        binding.addEditFabImageView.setOnClickListener { viewModel.editRecipe() }
+        binding.deleteFabImageView.setOnClickListener { showDeleteDialog() }
+        binding.deleteFabImageView.visibility = View.VISIBLE
     }
 
     private fun setupAddView() {
-        setupFabOnClick { viewModel.addRecipe() }
+        binding.addEditFabImageView.setOnClickListener { viewModel.addRecipe() }
     }
 
-    private fun setupFabOnClick(action: () -> Unit) {
-        binding.fabImageView.setOnClickListener { action() }
+    private fun showDeleteDialog() {
+        binding.alertDialogLayout.visibility = View.VISIBLE
+        binding.backTextView.setOnClickListener {
+            binding.alertDialogLayout.visibility = View.GONE
+        }
+        binding.deleteTextView.setOnClickListener {
+            viewModel.deleteRecipe()
+        }
     }
 }

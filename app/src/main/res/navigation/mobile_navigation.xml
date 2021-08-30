@@ -13,7 +13,14 @@
   <fragment
       android:id="@+id/navigation_add_edit_recipe"
       android:name="com.jakubaniola.myrecipebook.ui.addeditrecipe.AddEditRecipeFragment"
-      tools:layout="@layout/fragment_add_edit_recipe" />
+      tools:layout="@layout/fragment_add_edit_recipe">
+    <action
+        android:id="@+id/navigate_without_stack_to_recipe_list"
+        app:destination="@id/navigation_recipe_list"
+        app:launchSingleTop="true"
+        app:popUpTo="@id/navigation_recipe_list"
+        app:popUpToInclusive="true" />
+  </fragment>
 
   <fragment
       android:id="@+id/navigation_recipe_details"

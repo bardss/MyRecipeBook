@@ -109,9 +109,11 @@ class RecipeDetailsFragment : Fragment(), PickPhotoActions {
     }
 
     private fun setIngredients(ingredients: List<String>) {
-        binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.ingredientsRecyclerView.adapter = IngredientsListAdapter().apply {
-            setIngredients(ingredients)
-        }
+        if (ingredients.isNotEmpty()) {
+            binding.ingredientsRecyclerView.layoutManager = LinearLayoutManager(context)
+            binding.ingredientsRecyclerView.adapter = IngredientsListAdapter().apply {
+                setIngredients(ingredients)
+            }
+        } else binding.ingredientsLabelTextView.visibility = View.GONE
     }
 }
