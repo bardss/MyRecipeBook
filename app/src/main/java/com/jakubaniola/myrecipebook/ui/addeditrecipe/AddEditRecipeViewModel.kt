@@ -25,11 +25,32 @@ class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : V
     var recipePhotoPaths: MutableList<String> = mutableListOf()
 
     fun addRecipe() {
-        val validationErrors = getAddRecipeErrors()
+        validateRecipeErrors(
+            onValidAction = { addRecipeToDatabase() },
+            onInvalidAction = {
+                viewState.postValue(AddEditRecipeViewState.AddEditRecipeErrorState(it))
+            }
+        )
+    }
+
+    fun editRecipe() {
+        validateRecipeErrors(
+            onValidAction = { editRecipeInDatabase() },
+            onInvalidAction = {
+                viewState.postValue(AddEditRecipeViewState.AddEditRecipeErrorState(it))
+            }
+        )
+    }
+
+    private fun validateRecipeErrors(
+        onValidAction: () -> Unit,
+        onInvalidAction: (List<AddEditRecipeFieldError>) -> Unit
+    ) {
+        val validationErrors = getAddEditRecipeErrors()
         if (validationErrors.isEmpty()) {
-            addRecipeToDatabase()
+            onValidAction()
         } else {
-            viewState.postValue(AddEditRecipeViewState.AddEditRecipeErrorState(validationErrors))
+            onInvalidAction(validationErrors)
         }
     }
 
@@ -43,25 +64,38 @@ class AddEditRecipeViewModel(private val recipeRepository: RecipeRepository) : V
 
     private fun addRecipeToDatabase() {
         viewModelScope.launch {
-            val rate = rate.toInt()
-            val recipeToAdd = Recipe(
-                null,
-                name = name,
-                rate = rate,
-                timeToPrepare = prepTime,
-                ingredients = ingredients,
-                recipe = recipeText,
-                urlToRecipe = urlToRecipe,
-                resultPhotoPath = resultPhotoPath,
-                recipePhotoPaths = recipePhotoPaths
-            )
+            val recipeToAdd = getRecipeToAddOrEdit()
             recipeRepository.addRecipe(recipeToAdd)
         }.invokeOnCompletion {
             viewState.postValue(AddEditRecipeViewState.AfterAddEditRecipeState)
         }
     }
 
-    private fun getAddRecipeErrors(): List<AddEditRecipeFieldError> {
+    private fun editRecipeInDatabase() {
+        viewModelScope.launch {
+            val recipeToEdit = getRecipeToAddOrEdit(recipe.value?.id)
+            recipeRepository.editRecipe(recipeToEdit)
+        }.invokeOnCompletion {
+            viewState.postValue(AddEditRecipeViewState.AfterAddEditRecipeState)
+        }
+    }
+
+    private fun getRecipeToAddOrEdit(recipeId: Int? = null): Recipe {
+        val rate = rate.toInt()
+        return Recipe(
+            id = recipeId,
+            name = name,
+            rate = rate,
+            timeToPrepare = prepTime,
+            ingredients = ingredients,
+            recipe = recipeText,
+            urlToRecipe = urlToRecipe,
+            resultPhotoPath = resultPhotoPath,
+            recipePhotoPaths = recipePhotoPaths
+        )
+    }
+
+    private fun getAddEditRecipeErrors(): List<AddEditRecipeFieldError> {
         val errors = mutableListOf<AddEditRecipeFieldError>()
         if (!isNameValid()) errors.add(AddEditRecipeFieldError.EMPTY_TITLE)
         if (!isRateValid()) errors.add(AddEditRecipeFieldError.INVALID_RATE)

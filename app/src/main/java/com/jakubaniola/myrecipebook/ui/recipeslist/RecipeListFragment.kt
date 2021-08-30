@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -55,6 +56,7 @@ class RecipeListFragment : Fragment() {
             PickPhotoImageUtil(binding.recipeRecyclerView.context),
             ::navigateToRecipeDetails
         )
+        setRecyclerViewAnimation()
         binding.recipeRecyclerView.layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
     }
 
@@ -74,12 +76,14 @@ class RecipeListFragment : Fragment() {
                 binding.root.findViewById<ImageView>(R.id.list_type_image_view)
             when (listType) {
                 LIST -> {
-                    val drawable = ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_list)
+                    val drawable =
+                        ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_list)
                     listTypeImageView.setImageDrawable(drawable)
                     setLayoutManager(LinearLayoutManager(context))
                 }
                 GRID -> {
-                    val drawable = ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_grid)
+                    val drawable =
+                        ResUtil.getDrawable(listTypeImageView.context, R.drawable.ic_grid)
                     listTypeImageView.setImageDrawable(drawable)
                     setLayoutManager(StaggeredGridLayoutManager(2, VERTICAL))
                 }
@@ -109,6 +113,7 @@ class RecipeListFragment : Fragment() {
 
     private fun setupRecipeDataObserver() {
         viewModel.filteredRecipes.observe(viewLifecycleOwner, {
+            setRecyclerViewAnimation()
             adapter.setRecipes(it)
         })
     }
@@ -133,5 +138,11 @@ class RecipeListFragment : Fragment() {
             putInt(ArgumentKeys.RECIPE_ID, recipeId)
         }
         findNavController().navigate(R.id.navigation_recipe_details, arguments)
+    }
+
+    private fun setRecyclerViewAnimation() {
+        val animation = AnimationUtils.loadLayoutAnimation(context, R.anim.layout_animation_fade_in)
+        binding.recipeRecyclerView.layoutAnimation = animation
+        binding.recipeRecyclerView.scheduleLayoutAnimation()
     }
 }

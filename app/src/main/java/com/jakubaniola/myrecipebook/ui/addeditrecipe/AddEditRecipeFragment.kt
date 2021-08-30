@@ -98,7 +98,7 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
     }
 
     private fun navigateBack() {
-        findNavController().navigate(R.id.navigation_recipe_list)
+        findNavController().popBackStack()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -126,7 +126,7 @@ class AddEditRecipeFragment : Fragment(), PickPhotoActions {
     }
 
     private fun setupEditView() {
-        setupFabOnClick { }
+        setupFabOnClick { viewModel.editRecipe() }
     }
 
     private fun setupAddView() {
