@@ -10,14 +10,14 @@ interface RecipeDao {
     fun getAllRecipes(): Flow<List<Recipe>>
 
     @Query("SELECT * FROM recipe WHERE id IS :recipeId")
-    suspend fun getRecipe(recipeId: Int): Recipe
+    fun getRecipe(recipeId: Int): Recipe
 
     @Insert
-    suspend fun addRecipe(recipe: Recipe)
+    fun addRecipe(recipe: Recipe)
 
     @Update
-    suspend fun editRecipe(recipe: Recipe)
+    fun editRecipe(recipe: Recipe)
 
     @Delete
-    suspend fun deleteRecipe(recipe: Recipe)
+    fun deleteRecipe(recipe: Recipe)
 }
